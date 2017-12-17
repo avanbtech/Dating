@@ -1,10 +1,15 @@
 In this project uses following technologies:
 
 Node.js and Express as backend server
+
 Passport as the authentication package
+
 MongoDB/Mongoose for database connection
-jade as view engine for Node.js
-javascript for front-end scripting
+
+Jade as view engine for Node.js
+
+Javascript for front-end scripting
+
 jQuery for making AJAX requests
 
 The website has following 4 pages:
