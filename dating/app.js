@@ -10,9 +10,20 @@ var session = require('express-session');
 var passport = require('passport');
 var localStrategy = require('mongodb');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/dating');
+var mongoDB = 'mongodb://localhost:27017/datingDB';
+
+var index = require('./routes/index');
+var users = require('./routes/users');
+
+// mongoose.connect('mongodb://localhost/dating');
 
 var app = express();
+
+//Connect database
+mongoose.connect(mongoDB, {useMongoclient: true});
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
