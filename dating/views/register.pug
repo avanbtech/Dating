@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    h2.page-header Register
+    form(method='post', action='/users/register')
+        .form-group
+            label Name
+            input.form-control(type='text', placeholder='Name', name='name')
+        .form-group
+            label Username
+            input.form-control(type='text', placeholder='Username', name='username')
+        .form-group
+            label Password
+            input.form-control(type='password', placeholder='password', name='password')
+        .form-group
+            label Confirm Password
+            input.form-control(type='text', placeholder='Password', name='password2')
+        button.btn.btn-default(type='submit') Submit
