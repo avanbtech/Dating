@@ -2,6 +2,32 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/css/style.css')
+    link(rel='stylesheet', href='/css/bootstrap.css')
+    //TODO:
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
   body
-    block content
+    .container
+      header.header.clearfix
+        nav
+          ul.nav.nav-pills.float-right
+            li.nav-item
+              a.nav-link.active(href='/')
+                | Home
+                span.sr-only (current)
+            li.nav-item
+              a.nav-link(href='/users/login') Login
+            li.nav-item
+              a.nav-link(href='/users/register') Register
+            li.nav-item
+              a.nav-link(href='/users/logout') Logout
+        h3.text-muted Home
+      main(role='main')
+        .row
+          .col-lg-12
+            block content
+      footer.footer
+        p © Dating Website 2017
+    // /container
+
