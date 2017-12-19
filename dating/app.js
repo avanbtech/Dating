@@ -15,8 +15,6 @@ var mongoDB = 'mongodb://localhost:27017/datingDB';
 var index = require('./routes/index');
 var users = require('./routes/users');
 
-// mongoose.connect('mongodb://localhost/dating');
-
 var app = express();
 
 //Connect database

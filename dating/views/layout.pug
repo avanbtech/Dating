@@ -4,9 +4,6 @@ html
     title= title
     link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/css/bootstrap.css')
-    //TODO:
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
-    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
   body
     .container
       header.header.clearfix
@@ -18,6 +15,12 @@ html
                             | Home
                             span.sr-only (current)
                     li.nav-item
+                        a.nav-link(href='/users/browse') Browse
+                    li.nav-item
+                        a.nav-link(href='/users/messages') Messages
+                    li.nav-item
+                        a.nav-link(href='/users/profile') Profile
+                    li.nav-item
                         a.nav-link(href='/users/logout') Logout
                 else
                     li.nav-item
@@ -28,7 +31,13 @@ html
       main(role='main')
         .row
           .col-lg-12
-            block content
+              if success_msg.length > 0
+                  .alert.alert-success #{success_msg}
+              if error_msg.length > 0
+                  .alert.alert-danger #{error_msg}
+              if error.length > 0
+                  .alert.alert-danger #{error}
+              block content
       footer.footer
         p © Dating Website 2017
     // /container
