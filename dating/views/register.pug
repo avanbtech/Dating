@@ -2,14 +2,23 @@ extends layout
 
 block content
     h2.page-header Register
+    if errors
+        each err in errors
+            .alert.alert-danger #{err.msg}
     form(method='post', action='/users/register')
         .form-group
-            label Name
-            input.form-control(type='text', placeholder='Name', name='name')
+            label First Name
+            input.form-control(type='text', placeholder='First Name', name='firstName')
+        .form-group
+            label Last Name
+            input.form-control(type='text', placeholder='Last Name', name='lastName')
         .form-group
             label Username
             input.form-control(type='text', placeholder='Username', name='username')
         .form-group
+        .form-group
+            label Date of Birth
+            input.form-control(type='date', placeholder='Date of Birth', name='birthday')
             label Email
             input.form-control(type='email', placeholder='Email', name='email')
         .form-group
@@ -17,5 +26,5 @@ block content
             input.form-control(type='password', placeholder='password', name='password')
         .form-group
             label Confirm Password
-            input.form-control(type='text', placeholder='Password', name='password2')
+            input.form-control(type='password', placeholder='Password', name='password2')
         button.btn.btn-default(type='submit') Submit

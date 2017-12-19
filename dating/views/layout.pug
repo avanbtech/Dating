@@ -11,17 +11,17 @@ html
     .container
       header.header.clearfix
         nav
-          ul.nav.nav-pills.float-right
-            li.nav-item
-              a.nav-link.active(href='/')
-                | Home
-                span.sr-only (current)
-            li.nav-item
-              a.nav-link(href='/users/login') Login
-            li.nav-item
-              a.nav-link(href='/users/register') Register
-            li.nav-item
-              a.nav-link(href='/users/logout') Logout
+            ul.nav.nav-pills.pull-right
+                if user
+                    li(role='presentation')
+                        a(href='/') Dashboard
+                    li(role='presentation')
+                        a(href='/users/logout') Logout
+                else
+                    li(role='presentation')
+                        a(href='/users/login') Login
+                    li(role='presentation')
+                        a(href='/users/register') Register
         h3.text-muted Home
       main(role='main')
         .row

@@ -5,8 +5,8 @@ block content
     form(method='post', action='/users/login')
         .form-group
             label Username
-            input.form-control(type='text', placeholder='Username')
+            input.form-control(type='text', placeholder='Username', name='username')
         .form-group
             label Password
-            input.form-control(type='password', placeholder='password')
+            input.form-control(type='password', placeholder='password', name='password')
         button.btn.btn-default(type='submit') Submit
