@@ -68,7 +68,17 @@ exports.user_logout_get = function(req, res, next){
 
 // Handle get request for profile
 exports.user_profile_get = function(req, res, next){
-    res.render('profile');
+    User.findById(req.user._id, function(err, result){
+       if(err){throw err}
+       let date = result.date_of_birth;
+       let updated_result = {
+           first_name: result.first_name,
+           last_name: result.last_name,
+           email: result.email,
+           date_of_birth: (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate())
+       }
+        res.render('profile', {logged_in_user: updated_result});
+    });
 };
 
 // Handle post request for profile update
@@ -82,8 +92,6 @@ exports.user_profile_update_post = function(req, res, next){
     req.checkBody('date_of_birth', 'Date of birth is required').notEmpty();
 
     var errors = req.validationErrors();
-    console.log('errors: ');
-    console.log(errors);
 
     if(errors){
         let response = {
@@ -94,20 +102,23 @@ exports.user_profile_update_post = function(req, res, next){
     }
     else{
         const currentUser = {
-          first_name: req.body.firstName.value,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email,
+            date_of_birth: req.body.date_of_birth,
         };
-        User.collection('users').update(
-            {_id: req.user._id}, req.body,function(req, res){
+        User.update(
+            {_id: req.user._id}, currentUser,function(err, result){
+                let success = {success: true};
                 if(err){
                     console.log(err);
                     console.log("We are in userController");
-                    req.flash('error_msg', 'User information cannot be updated');
-                    res.redirect('/user/profile/update');
+                    success.success = false;
                 }
                 else{
-                    req.flash('success_msg', 'User information was updated');
-                    res.redirect('/user/profile/update');
+                    success.success = true;
                 }
+                res.json(success);
         });
     }
 };
@@ -116,9 +127,18 @@ exports.user_profile_update_post = function(req, res, next){
 exports.user_browse_get = function(req, res, next){
     User.find({}, function(err, users){
        if(err){throw err}
-       if(err){throw err}
        console.log(users);
-       res.render('browse', {registered_users: users});
+       let year = new Date().getFullYear();
+       var users_with_age =[];
+       for (var i=0; i< users.length; i++){
+            let user_and_age = {
+              user: users[i],
+              age :  year - users[i].date_of_birth.getFullYear(),
+            };
+            users_with_age.push(user_and_age);
+            console.log(user_and_age.age);
+        }
+       res.render('browse', {registered_users: users_with_age});
     });
 };
 
