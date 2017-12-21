@@ -1,11 +1,42 @@
 extends layout
 
 block content
+    p Starting
+    if errors_messages
+        p each
+        each err in errors_messages
+            p error1
+            .alert.alert-danger #{err.msg}
     .row
-        .col-lg-2
+        .col-sm-3
             //TODO: Place for adding user's profile picture
-        .col-lg-10
-            .col-lg-2
-                .form-group
-                    label First name
-                    input.form-control(type='text', placeholder='Username', name='username')
+            imgage.profile_image(src='/images/default_image.png', alt='profile_image')
+        .col-sm-9
+            .form-group
+                .row
+                    .col-sm-3
+                        label First name
+                    .col-sm-8
+                        input#first_name.form-control(type='text', placeholder='First name', name='firstName')
+            .form-group
+                .row
+                    .col-sm-3
+                        label Last name
+                    .col-sm-8
+                        input#last_name.form-control(type='text', placeholder='Last name', name='lastName')
+            .form-group
+                .row
+                    .col-sm-3
+                        label Email
+                    .col-sm-8
+                        input#email.form-control(type='email', placeholder='Email', name='email')
+            .form-group
+                .row
+                    .col-sm-3
+                        label Date of Birth
+                    .col-sm-8
+                        input#date_of_birth.form-control(type='date', placeholder='Date of Birth', name='dateOfBirth')
+            button#update.btn.btn-default(type='submit') Update
+
+
+    script(src='/js/update_profile.js')

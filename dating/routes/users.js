@@ -13,12 +13,20 @@ router.post('/register', userController.user_register_post);
 router.get('/login', userController.user_login_get);
 
 // Login post
-router.post('/login', userController.user_login_post);
+router.post('/login', userController.user_login_post, function(req, res) {
+    res.redirect('/');
+});
 
 // Logout
 router.get('/logout', userController.user_logout_get);
 
 // Profile
 router.get('/profile', userController.user_profile_get);
+
+// Update
+router.post('/profile/update', userController.user_profile_update_post);
+
+//Browse
+router.get('/browse', userController.user_browse_get);
 
 module.exports = router;

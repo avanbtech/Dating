@@ -50,20 +50,16 @@ exports.user_register_post = function(req, res, next){
     }
 };
 
-// Handle get request for login page
-exports.user_login_get = function(req, res, next){
+exports.user_login_get = function(req, res, next) {
     res.render('login');
 };
 
 // Handle post request for login
-exports.user_login_post = function(req, res, next){
-    passport.authenticate('local', {successRedirect:'/', failureRedirect: '/users/login',failureFlash: true }),
-        function(req, res) {
-            res.redirect('/');
-        }
-};
+exports.user_login_post = passport.authenticate('local', {
+    successRedirect:'/', failureRedirect: '/users/login',failureFlash: true
+});
 
-//Handle get request for logout
+// Handle get request for logout
 exports.user_logout_get = function(req, res, next){
     req.logout();
     req.flash('success_msg', 'You are logged out');
@@ -73,6 +69,57 @@ exports.user_logout_get = function(req, res, next){
 // Handle get request for profile
 exports.user_profile_get = function(req, res, next){
     res.render('profile');
+};
+
+// Handle post request for profile update
+exports.user_profile_update_post = function(req, res, next){
+
+    req.checkBody('first_name', 'First name is required').notEmpty();
+    req.checkBody('last_name', 'Last name is required').notEmpty();
+    req.checkBody('email', 'Email is required').notEmpty();
+    req.checkBody('email', 'Email is not valid').isEmail();
+    req.checkBody('date_of_birth', 'Date of birth is required').optional({ checkFalsy: true }).isISO8601();
+    req.checkBody('date_of_birth', 'Date of birth is required').notEmpty();
+
+    var errors = req.validationErrors();
+    console.log('errors: ');
+    console.log(errors);
+
+    if(errors){
+        let response = {
+            error_msg: errors,
+            success: false,
+        };
+        res.json(response);
+    }
+    else{
+        const currentUser = {
+          first_name: req.body.firstName.value,
+        };
+        User.collection('users').update(
+            {_id: req.user._id}, req.body,function(req, res){
+                if(err){
+                    console.log(err);
+                    console.log("We are in userController");
+                    req.flash('error_msg', 'User information cannot be updated');
+                    res.redirect('/user/profile/update');
+                }
+                else{
+                    req.flash('success_msg', 'User information was updated');
+                    res.redirect('/user/profile/update');
+                }
+        });
+    }
+};
+
+// Handle get request for browse
+exports.user_browse_get = function(req, res, next){
+    User.find({}, function(err, users){
+       if(err){throw err}
+       if(err){throw err}
+       console.log(users);
+       res.render('browse', {registered_users: users});
+    });
 };
 
 
