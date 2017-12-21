@@ -1,4 +1,7 @@
 onload = function(){
+    var label_message = document.getElementById('error_display');
+    label_message.style.display = 'none';
+
     var updateBtn = document.getElementById('update');
     updateBtn.onclick = updateUserProfile;
 
@@ -20,12 +23,14 @@ onload = function(){
             }),
             contentType: 'application/json',
             success: function(response){
-                if(response.succes){
-                    req.flash('success_msg', 'Your information was updated successfully');
-                    redirect('/users/profile/update');
+                if(response.success){
+                    label_message.style.color = 'green';
+                    label_message.innerHTML = 'Your information was updated';
                 }else{
-
+                    label_message.style.color = 'red';
+                    label_message.innerHTML = 'Your information was not updated';
                 }
+                label_message.style.display = 'block';
             }
         })
     }

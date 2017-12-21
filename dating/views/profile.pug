@@ -1,7 +1,6 @@
 extends layout
 
 block content
-    p Starting
     if errors_messages
         p each
         each err in errors_messages
@@ -17,26 +16,31 @@ block content
                     .col-sm-3
                         label First name
                     .col-sm-8
-                        input#first_name.form-control(type='text', placeholder='First name', name='firstName')
+                        input#first_name.form-control(type='text', placeholder='First name', name='firstName', value=(logged_in_user.first_name))
             .form-group
                 .row
                     .col-sm-3
                         label Last name
                     .col-sm-8
-                        input#last_name.form-control(type='text', placeholder='Last name', name='lastName')
+                        input#last_name.form-control(type='text', placeholder='Last name', name='lastName', value=(logged_in_user.last_name))
             .form-group
                 .row
                     .col-sm-3
                         label Email
                     .col-sm-8
-                        input#email.form-control(type='email', placeholder='Email', name='email')
+                        input#email.form-control(type='email', placeholder='Email', name='email', value=(logged_in_user.email))
             .form-group
                 .row
                     .col-sm-3
                         label Date of Birth
                     .col-sm-8
-                        input#date_of_birth.form-control(type='date', placeholder='Date of Birth', name='dateOfBirth')
-            button#update.btn.btn-default(type='submit') Update
+                        input#date_of_birth.form-control(type='date', placeholder='Date of Birth', name='dateOfBirth', value=(logged_in_user.date_of_birth))
+            .form-group
+                .row
+                    .col-sm-3
+                        button#update.btn.btn-default(type='submit') Update
+                    .col-sm-8
+                        label#error_display
 
 
     script(src='/js/update_profile.js')
