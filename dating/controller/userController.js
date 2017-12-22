@@ -140,11 +140,16 @@ exports.user_browse_get = function(req, res, next){
        let year = new Date().getFullYear();
        var users_with_age =[];
        for (var i=0; i< users.length; i++){
+           console.log(req.user._id + ', ' + users[i]._id);
+           if(req.user.username === users[i].username){
+               continue;
+           }
             let user_and_age = {
                 user: users[i],
                 age :  year - users[i].date_of_birth.getFullYear(),
             };
             users_with_age.push(user_and_age);
+            console.log(user_and_age);
         }
        res.render('browse', {registered_users: users_with_age});
     });
@@ -165,7 +170,10 @@ exports.user_detail_get = function(req, res, next){
 
 // Handle post request to sent a message to another member
 exports.user_message_post = function(req, res, next){
+
     req.checkBody('message', 'Message cannot be empty');
+
+    var errors = req.validationErrors();
 
     if(errors){
         let response = {
@@ -175,12 +183,12 @@ exports.user_message_post = function(req, res, next){
         res.json(response);
     }
     else{
-        const newMessage = {
+        const newMessage = new Message({
             fromUserId: req.user._id,
             toUserId: req.body.toUserId,
             message: req.body.message,
             date: new Date()
-        };
+        });
         console.log(newMessage);
         Message.createMessage(newMessage, function(err, message){
             console.log(message);
