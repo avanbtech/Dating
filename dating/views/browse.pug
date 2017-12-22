@@ -6,11 +6,12 @@ block content
         .col-sm-8
             each user in registered_users
                 .row
-                    .col-sm-3
-                        //TODO: Place the image here
+                    .col-sm-4
+                        a(href='/users/browse/' + user.user._id)
+                            image.profile_image(src=user.user.image)
                     .col-sm-5
                         .row
-                            p #{user.user.first_name} #{user.user.last_name}
+                            a(href='/users/browse/' + user.user._id) #{user.user.first_name} #{user.user.last_name}
                         .row
                             p #{user.age} years old
-                        hr
+                hr
