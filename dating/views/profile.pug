@@ -8,8 +8,7 @@ block content
             .alert.alert-danger #{err.msg}
     .row
         .col-sm-3
-            //TODO: Place for adding user's profile picture
-            imgage.profile_image(src='/images/default_image.png', alt='profile_image')
+            image.profile_image(src=logged_in_user.image, alt='profile_image')
         .col-sm-9
             .form-group
                 .row
@@ -41,6 +40,5 @@ block content
                         button#update.btn.btn-default(type='submit') Update
                     .col-sm-8
                         label#error_display
-
 
     script(src='/js/update_profile.js')

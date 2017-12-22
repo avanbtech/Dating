@@ -1,4 +1,5 @@
 var User = require('../models/user');
+var Message = require('../models/message');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
@@ -55,7 +56,7 @@ exports.user_register_post = function(req, res, next){
 exports.user_login_get = function(req, res, next) {
     res.render('login');
 };
-                                                                                    //TODO:Handled
+
 // Handle post request for login
 exports.user_login_post = passport.authenticate('local', {
     successRedirect:'/', failureRedirect: '/users/login',failureFlash: true
@@ -68,7 +69,7 @@ exports.user_logout_get = function(req, res, next){
     res.redirect('/users/login');
 };
 
-// Handle get request for profile                       //TODO: Add authontication
+// Handle get request for profile
 exports.user_profile_get = function(req, res, next){
     User.findById(req.user._id, function(err, result){
        if(err){throw err}
@@ -86,7 +87,6 @@ exports.user_profile_get = function(req, res, next){
            last_name: result.last_name,
            email: result.email,
            date_of_birth: (date.getFullYear() + '-' + month + '-' + day),
-           //date_of_birth: '1990-01-12',
            image: '/images/default_image.png'
        };
         res.render('profile', {logged_in_user: updated_result});
@@ -123,8 +123,6 @@ exports.user_profile_update_post = function(req, res, next){
             {_id: req.user._id}, currentUser,function(err, result){
                 let success = {success: true};
                 if(err){
-                    console.log(err);
-                    console.log("We are in userController");
                     success.success = false;
                 }
                 else{
@@ -135,7 +133,7 @@ exports.user_profile_update_post = function(req, res, next){
     }
 };
 
-// Handle get request for browse                            //TODO: Add authontication
+// Handle get request for browse
 exports.user_browse_get = function(req, res, next){
     User.find({}, function(err, users){
        if(err){throw err}
@@ -152,7 +150,7 @@ exports.user_browse_get = function(req, res, next){
     });
 };
 
-// Handle get request to display user detail                    //TODO: Add authentication
+// Handle get request to display user detail
 exports.user_detail_get = function(req, res, next){
     User.findById({_id: req.params.id}, function(err, specific_user){
         if(err){throw err}
@@ -163,6 +161,39 @@ exports.user_detail_get = function(req, res, next){
         }
         res.render('profile_detail', {user: the_user});
     })
+};
+
+// Handle post request to sent a message to another member
+exports.user_message_post = function(req, res, next){
+    req.checkBody('message', 'Message cannot be empty');
+
+    if(errors){
+        let response = {
+            error_msg: errors,
+            success: false,
+        };
+        res.json(response);
+    }
+    else{
+        const newMessage = {
+            fromUserId: req.user._id,
+            toUserId: req.body.toUserId,
+            message: req.body.message,
+            date: new Date()
+        };
+        console.log(newMessage);
+        Message.createMessage(newMessage, function(err, message){
+            console.log(message);
+            let success = {success: true};
+            if(err){
+                success.success = false;
+            }
+            else{
+                success.success = true;
+            }
+            res.json(success);
+        })
+    }
 };
 
 passport.use(new LocalStrategy(

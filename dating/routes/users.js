@@ -33,4 +33,7 @@ router.get('/browse', authentication.isLoggedIn, userController.user_browse_get)
 // Browse for a user
 router.get('/browse/:id', authentication.isLoggedIn, userController.user_detail_get);
 
+// Send Message
+router.post('/message/add', authentication.isLoggedIn, userController.user_message_post);
+
 module.exports = router;
