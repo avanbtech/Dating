@@ -1,0 +1,44 @@
+extends layout
+
+block content
+    .row
+        .col-sm-3
+            image.profile_image(src=user.user.image, alt='profile_image')
+        .col-sm-9
+            .form-group
+                .row
+                    .col-sm-4
+                        label First name:
+                    .col-sm-8
+                        label #{user.user.first_name}
+            .form-group
+                .row
+                    .col-sm-4
+                        label Last name:
+                    .col-sm-8
+                        label #{user.user.last_name}
+            .form-group
+                .row
+                    .col-sm-4
+                        label Email:
+                    .col-sm-8
+                        label #{user.user.email}
+            .form-group
+                .row
+                    .col-sm-4
+                        label Date of Birth:
+                    .col-sm-8
+                        label #{user.date}
+            .form-group
+                .row
+                    .col-sm-9
+                        textarea.form-control
+            .form-group
+                .row
+                    .col-sm-8
+                        button#update.btn.btn-default(type='submit') Message
+                    .col-sm-4
+                        label#error_display
+
+
+    script(src='/js/user_profile.js')

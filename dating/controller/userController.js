@@ -16,6 +16,7 @@ exports.user_register_post = function(req, res, next){
     var username = req.body.username;
     var password = req.body.password;
     var password2 = req.body.password2;
+    var user_image = '/images/default_image.png'
 
     // Validation
     req.checkBody('firstName', 'First name is required').notEmpty();
@@ -39,7 +40,8 @@ exports.user_register_post = function(req, res, next){
             username: username,
             email: email,
             password: password,
-            date_of_birth: dateOfBirth
+            date_of_birth: dateOfBirth,
+            image: user_image,
         });
         User.createUser(newUser, function(err, user){
             if(err) throw err;
@@ -53,7 +55,7 @@ exports.user_register_post = function(req, res, next){
 exports.user_login_get = function(req, res, next) {
     res.render('login');
 };
-
+                                                                                    //TODO:Handled
 // Handle post request for login
 exports.user_login_post = passport.authenticate('local', {
     successRedirect:'/', failureRedirect: '/users/login',failureFlash: true
@@ -66,17 +68,27 @@ exports.user_logout_get = function(req, res, next){
     res.redirect('/users/login');
 };
 
-// Handle get request for profile
+// Handle get request for profile                       //TODO: Add authontication
 exports.user_profile_get = function(req, res, next){
     User.findById(req.user._id, function(err, result){
        if(err){throw err}
        let date = result.date_of_birth;
+       let day = date.getDate();
+       let month = date.getMonth() + 1;
+       if(day < 10){
+         day = '0' + day;
+       };
+       if(month < 10){
+           month = '0' + month;
+       }
        let updated_result = {
            first_name: result.first_name,
            last_name: result.last_name,
            email: result.email,
-           date_of_birth: (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate())
-       }
+           date_of_birth: (date.getFullYear() + '-' + month + '-' + day),
+           //date_of_birth: '1990-01-12',
+           image: '/images/default_image.png'
+       };
         res.render('profile', {logged_in_user: updated_result});
     });
 };
@@ -123,25 +135,35 @@ exports.user_profile_update_post = function(req, res, next){
     }
 };
 
-// Handle get request for browse
+// Handle get request for browse                            //TODO: Add authontication
 exports.user_browse_get = function(req, res, next){
     User.find({}, function(err, users){
        if(err){throw err}
-       console.log(users);
        let year = new Date().getFullYear();
        var users_with_age =[];
        for (var i=0; i< users.length; i++){
             let user_and_age = {
-              user: users[i],
-              age :  year - users[i].date_of_birth.getFullYear(),
+                user: users[i],
+                age :  year - users[i].date_of_birth.getFullYear(),
             };
             users_with_age.push(user_and_age);
-            console.log(user_and_age.age);
         }
        res.render('browse', {registered_users: users_with_age});
     });
 };
 
+// Handle get request to display user detail                    //TODO: Add authentication
+exports.user_detail_get = function(req, res, next){
+    User.findById({_id: req.params.id}, function(err, specific_user){
+        if(err){throw err}
+        let birth_day = specific_user.date_of_birth;
+        let the_user = {
+            user: specific_user,
+            date: birth_day.getDate() + '/' + (birth_day.getMonth() + 1) + '/' + birth_day.getFullYear(),
+        }
+        res.render('profile_detail', {user: the_user});
+    })
+};
 
 passport.use(new LocalStrategy(
     function(username, password, done) {
