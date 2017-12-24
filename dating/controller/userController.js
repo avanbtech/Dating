@@ -182,16 +182,58 @@ exports.user_message_post = function(req, res, next){
         };
         res.json(response);
     }
-    else{
-        const newMessage = new Message({
-            fromUserId: req.user._id,
-            toUserId: req.body.toUserId,
-            message: req.body.message,
-            date: new Date()
+    else{   //TODO: find and update
+        Message.find({fromUserId: req.user._id, toUserId: req.body.toUserId}, function(err, conversation){
+            let success = {success: true};
+            if(err){
+                throw err;
+            }
+            else{
+                if(conversation.length === 0){
+                    const newMessage = new Message({
+                        fromUserId: req.user._id,
+                        toUserId: req.body.toUserId,
+                        message: req.body.message,
+                        date: new Date()
+                    });
+                    console.log(newMessage);
+                    Message.createMessage(newMessage, function(err, message){
+                        console.log(message);
+                        if(err){
+                            success.success = false;
+                        }
+                        else{
+                            success.success = true;
+                        }
+                    })
+                }
+                else{
+                    console.log(conversation.message);
+                    conversation.message.push(req.body.message);
+                    success.success = true;
+                }
+            }
+            res.json(success);
         });
-        console.log(newMessage);
-        Message.createMessage(newMessage, function(err, message){
-            console.log(message);
+    }
+};
+
+// Handle get request for message page
+exports.user_messages = function (req, res, next){
+    res.render('messages');
+};
+
+// Handle get request to see all the messages
+exports.user_messages_get = function(req, res, next){
+    console.log(req.user._id);
+/*    Message.find({fromUserId: req.user._id}, function(err, messages_from_user){ //TODO: This part is for received messages
+
+    })*/
+    Message.find({toUserId: req.user._id}, 'fromUserId toUserId message sent_date')
+        .populate('fromUserId')
+        .populate('toUserId')
+        .exec(function(err, messages_to_user){
+
             let success = {success: true};
             if(err){
                 success.success = false;
@@ -199,10 +241,13 @@ exports.user_message_post = function(req, res, next){
             else{
                 success.success = true;
             }
-            res.json(success);
-        })
-    }
-};
+            let response = {
+                users: messages_to_user,
+                success: success
+            }
+            res.json(response);
+    })
+}
 
 passport.use(new LocalStrategy(
     function(username, password, done) {

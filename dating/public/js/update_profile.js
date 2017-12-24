@@ -24,8 +24,7 @@ onload = function(){
             contentType: 'application/json',
             success: function(response){
                 if(response.success){
-                    label_message.style.color = 'green';
-                    label_message.innerHTML = 'Your information was updated';
+
                 }else{
                     label_message.style.color = 'red';
                     label_message.innerHTML = 'Your information was not updated';
