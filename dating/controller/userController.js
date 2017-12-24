@@ -172,9 +172,7 @@ exports.user_detail_get = function(req, res, next){
 exports.user_message_post = function(req, res, next){
 
     req.checkBody('message', 'Message cannot be empty');
-
     var errors = req.validationErrors();
-
     if(errors){
         let response = {
             error_msg: errors,
@@ -182,39 +180,25 @@ exports.user_message_post = function(req, res, next){
         };
         res.json(response);
     }
-    else{   //TODO: find and update
-        Message.find({fromUserId: req.user._id, toUserId: req.body.toUserId}, function(err, conversation){
+    else{
+        const newMessage = new Message({
+            fromUserId: req.user._id,
+            toUserId: req.body.toUserId,
+            message: req.body.message,
+            date: new Date()
+        });
+        console.log(newMessage);
+        Message.createMessage(newMessage, function(err, message){
+            console.log(message);
             let success = {success: true};
             if(err){
-                throw err;
+                success.success = false;
             }
             else{
-                if(conversation.length === 0){
-                    const newMessage = new Message({
-                        fromUserId: req.user._id,
-                        toUserId: req.body.toUserId,
-                        message: req.body.message,
-                        date: new Date()
-                    });
-                    console.log(newMessage);
-                    Message.createMessage(newMessage, function(err, message){
-                        console.log(message);
-                        if(err){
-                            success.success = false;
-                        }
-                        else{
-                            success.success = true;
-                        }
-                    })
-                }
-                else{
-                    console.log(conversation.message);
-                    conversation.message.push(req.body.message);
-                    success.success = true;
-                }
+                success.success = true;
             }
             res.json(success);
-        });
+        })
     }
 };
 
