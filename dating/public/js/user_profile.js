@@ -8,13 +8,15 @@ onload = function(){
         let serverURL = '/users/message/add';
         let message_element = document.getElementById('message_area');
         let pathname = window.location.pathname.split('/');
-
+        let date = new Date();
+        console.log(date);
         $.ajax({
             url: serverURL,
             method: 'POST',
             data: JSON.stringify({
             toUserId: pathname[pathname.length - 1],
-            message: message_element.value
+            message: message_element.value,
+            sent_date: date
             }),
             contentType: 'application/json',
             success: function(response){
