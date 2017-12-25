@@ -185,7 +185,7 @@ exports.user_message_post = function(req, res, next){
             fromUserId: req.user._id,
             toUserId: req.body.toUserId,
             message: req.body.message,
-            date: new Date()
+            date: req.body.date
         });
         console.log(newMessage);
         Message.createMessage(newMessage, function(err, message){
@@ -213,11 +213,15 @@ exports.user_messages_get = function(req, res, next){
 /*    Message.find({fromUserId: req.user._id}, function(err, messages_from_user){ //TODO: This part is for received messages
 
     })*/
-    Message.find({toUserId: req.user._id}, 'fromUserId toUserId message sent_date')
+    let query = {
+        $or:[{toUserId: req.user._id}, {fromUserId: req.user._id}]
+    };
+
+    Message.find(query, 'fromUserId toUserId message sent_date')
         .populate('fromUserId')
         .populate('toUserId')
         .exec(function(err, messages_to_user){
-
+            console.log('In controller for message');
             let success = {success: true};
             if(err){
                 success.success = false;
@@ -226,7 +230,7 @@ exports.user_messages_get = function(req, res, next){
                 success.success = true;
             }
             let response = {
-                users: messages_to_user,
+                messages: messages_to_user,
                 success: success
             }
             res.json(response);
