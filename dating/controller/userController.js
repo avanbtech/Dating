@@ -210,9 +210,6 @@ exports.user_messages = function (req, res, next){
 // Handle get request to see all the messages
 exports.user_messages_get = function(req, res, next){
     console.log(req.user._id);
-/*    Message.find({fromUserId: req.user._id}, function(err, messages_from_user){ //TODO: This part is for received messages
-
-    })*/
     let query = {
         $or:[{toUserId: req.user._id}, {fromUserId: req.user._id}]
     };
@@ -231,6 +228,7 @@ exports.user_messages_get = function(req, res, next){
             }
             let response = {
                 messages: messages_to_user,
+                logged_in_user: req.user.username,
                 success: success
             }
             res.json(response);
