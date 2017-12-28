@@ -5,38 +5,35 @@ class Conversation{
     }
 }
 
-onload = function(){
-    let serverURL = '/users/messages/get';
+let serverURL = '/users/messages/get';
 
-    $.ajax({
-        url: serverURL,
-        data: JSON.stringify({
-        }),
-        contentType: 'application/json',
-        success: function(response) {
-            if (response.success) {
-                let users_sent_message = [];
-                for (let i = 0; i < response.messages.length; i++){
-                    if(response.messages[i].fromUserId.username !== response.logged_in_user) {
-                        users_sent_message.push(response.messages[i].fromUserId.username);
-                    }
+$.ajax({
+    url: serverURL,
+    data: JSON.stringify({
+    }),
+    contentType: 'application/json',
+    success: function(response) {
+        if (response.success) {
+            let users_sent_message = [];
+            for (let i = 0; i < response.messages.length; i++){
+                if(response.messages[i].fromUserId.username !== response.logged_in_user) {
+                    users_sent_message.push(response.messages[i].fromUserId.username);
                 }
-                var uniqe_contacts = findUniqeElements(users_sent_message);
-
-                let conversation_objects = [];
-                for(let j = 0; j < uniqe_contacts.length; j++){
-                    let newConversation = new Conversation(uniqe_contacts[j], findMessages(response.messages, uniqe_contacts[j]));
-                    conversation_objects.push(newConversation);
-                }
-                displayContacts(conversation_objects);
             }
-            else {
+            var uniqe_contacts = findUniqeElements(users_sent_message);
 
+            let conversation_objects = [];
+            for(let j = 0; j < uniqe_contacts.length; j++){
+                let newConversation = new Conversation(uniqe_contacts[j], findMessages(response.messages, uniqe_contacts[j]));
+                conversation_objects.push(newConversation);
             }
+            displayContacts(conversation_objects);
         }
-    })
+        else {
 
-};
+        }
+    }
+})
 
 function findUniqeElements(array) {
     var arr = [];
@@ -51,7 +48,7 @@ function findUniqeElements(array) {
 function displayContacts(conversations){
     let contactList = document.getElementById('contact_list');
     for(let i=0; i<conversations.length; i++){
-        let newContact = document.createElement('li');
+        let newContact = document.createElement('div');
         let newLink = document.createElement('a');
         newLink.setAttribute('href', '');
         let text = document.createTextNode(conversations[i].username);
@@ -76,23 +73,24 @@ function findMessages(messages, username){
 };
 
 function displayMessages(conversation){
-    let message_list_received = document.getElementById('message_received');
-    let message_list_sent = document.getElementById('message_sent');
-    message_list_received.innerHTML = "";
-    message_list_sent.innerHTML = "";
+
+    let message_list = document.getElementById('message_list');
+    message_list.innerHTML = "";
     for(let i = 0; i < conversation.messages.length; i++) {
         let newMessage = document.createElement('div');
         let text = document.createTextNode(conversation.messages[i].message);
         newMessage.appendChild(text);
         if(conversation.username === conversation.messages[i].fromUserId.username){
-            message_list_received.appendChild(newMessage);
-            let line = document.createElement('hr');
-            message_list_received.appendChild(line);
+            newMessage.className += "received";
+            // Fill hidden field to save username
+            let userId = document.getElementById('userId_hidden');
+            userId.value = conversation.messages[i].fromUserId._id;
         }
         else{
-            message_list_sent.appendChild(newMessage);
-            let line = document.createElement('hr');
-            message_list_sent.appendChild(line);
+            newMessage.className += "sent";
         }
+        message_list.appendChild(newMessage);
+        let line = document.createElement('hr');
+        message_list.appendChild(line);
     }
 };

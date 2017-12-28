@@ -7,11 +7,31 @@ block content
                 ul#contact_list Contacts
                     a(href='')
 
-        .col-sm-4
+        .col-sm-8
             .form-group
-                div#message_received Messages
+                ul#message_tag Messages
+                div#message_list
+    .row
         .col-sm-4
+        .col-sm-8
+            .row
+                .col-sm-7
+                    .form-group
+                        .row
+                            .col-sm-9
+                                textarea#message_area.form-control
+                .col-sm-5
+                    .form-group
+                        .row
+                            .col-sm-4
+                                button#message.btn.btn-default(type='submit') Message
+    .row
+        .col-sm-4
+        .col-sm-8
             .form-group
-                div#message_sent Messages
+                label#error_display
+
+    input#userId_hidden.form-control(type='hidden', value='')
 
     script(src='/js/display_messages.js')
+    script(src='/js/user_profile.js')

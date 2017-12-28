@@ -187,17 +187,18 @@ exports.user_message_post = function(req, res, next){
             message: req.body.message,
             date: req.body.date
         });
-        console.log(newMessage);
         Message.createMessage(newMessage, function(err, message){
             console.log(message);
-            let success = {success: true};
+            let response = {
+                newMessage: message,
+                success: true};
             if(err){
-                success.success = false;
+                response.success = false;
             }
             else{
-                success.success = true;
+                response.success = true;
             }
-            res.json(success);
+            res.json(response);
         })
     }
 };
@@ -218,10 +219,6 @@ exports.user_messages_get = function(req, res, next){
         .populate('fromUserId')
         .populate('toUserId')
         .exec(function(err, messages_to_user){
-            // let message_received = false;
-            // if(toUserID === req.user._id){
-            //     message_received = true;
-            // }
             let success = {success: true};
             if(err){
                 success.success = false;
@@ -232,7 +229,6 @@ exports.user_messages_get = function(req, res, next){
             let response = {
                 messages: messages_to_user,
                 logged_in_user: req.user.username,
-                // message_received: message_received,
                 success: success
             }
             res.json(response);
