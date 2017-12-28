@@ -76,14 +76,23 @@ function findMessages(messages, username){
 };
 
 function displayMessages(conversation){
-    let message_list = document.getElementById('message_list');
-    message_list.innerHTML = "";
+    let message_list_received = document.getElementById('message_received');
+    let message_list_sent = document.getElementById('message_sent');
+    message_list_received.innerHTML = "";
+    message_list_sent.innerHTML = "";
     for(let i = 0; i < conversation.messages.length; i++) {
-        let newMessage = document.createElement('li');
+        let newMessage = document.createElement('div');
         let text = document.createTextNode(conversation.messages[i].message);
         newMessage.appendChild(text);
-        message_list.appendChild(newMessage);
-        let line = document.createElement('hr');
-        message_list.appendChild(line);
+        if(conversation.username === conversation.messages[i].fromUserId.username){
+            message_list_received.appendChild(newMessage);
+            let line = document.createElement('hr');
+            message_list_received.appendChild(line);
+        }
+        else{
+            message_list_sent.appendChild(newMessage);
+            let line = document.createElement('hr');
+            message_list_sent.appendChild(line);
+        }
     }
 };

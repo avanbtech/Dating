@@ -218,7 +218,10 @@ exports.user_messages_get = function(req, res, next){
         .populate('fromUserId')
         .populate('toUserId')
         .exec(function(err, messages_to_user){
-            console.log('In controller for message');
+            // let message_received = false;
+            // if(toUserID === req.user._id){
+            //     message_received = true;
+            // }
             let success = {success: true};
             if(err){
                 success.success = false;
@@ -229,6 +232,7 @@ exports.user_messages_get = function(req, res, next){
             let response = {
                 messages: messages_to_user,
                 logged_in_user: req.user.username,
+                // message_received: message_received,
                 success: success
             }
             res.json(response);
