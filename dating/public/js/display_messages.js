@@ -51,7 +51,24 @@ function displayContacts(conversations){
         let newContact = document.createElement('div');
         let newLink = document.createElement('a');
         newLink.setAttribute('href', '');
-        let text = document.createTextNode(conversations[i].username);
+        // Add user picture
+        let user_image;
+        if(conversations[i].username === conversations[i].messages[0].fromUserId.username ){
+            user_image = conversations[i].messages[0].fromUserId.image;
+        }
+        else{
+            user_image = conversations[i].messages[0].toUserId.image;
+        }
+        // let image_src = user_image;
+        // let newContact_image = document.createElement('image');
+        // newContact_image.setAttribute('src', image_src);
+        // newContact_image.className += 'contact_image';
+        // newLink.appendChild(newContact_image);
+        //
+         let text = document.createTextNode(conversations[i].username);
+        //
+        // newContact_image.parentNode.insertBefore(text, newContact_image.nextSibling);
+
         newContact.appendChild(text);
         newLink.appendChild(newContact);
         contactList.appendChild(newLink);
