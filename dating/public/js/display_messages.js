@@ -47,10 +47,19 @@ function findUniqeElements(array) {
 
 function displayContacts(conversations){
     let contactList = document.getElementById('contact_list');
-    for(let i=0; i<conversations.length; i++){
-        let newContact = document.createElement('div');
+    for(let i = 0; i < conversations.length; i++){
         let newLink = document.createElement('a');
         newLink.setAttribute('href', '');
+        let newContact = document.createElement('div');
+        newContact.className += 'row';
+        newLink.appendChild(newContact);
+        contactList.appendChild(newLink);
+
+        let image_column = document.createElement('div');
+        image_column.className += 'col-sm-4';
+        newContact.appendChild(image_column);
+        let newContact_image = document.createElement('img');
+
         // Add user picture
         let user_image;
         if(conversations[i].username === conversations[i].messages[0].fromUserId.username ){
@@ -59,19 +68,39 @@ function displayContacts(conversations){
         else{
             user_image = conversations[i].messages[0].toUserId.image;
         }
+        let image_src = user_image;
+        newContact_image.setAttribute('src', image_src);
+        newContact_image.className += 'profile_image';
+        image_column.appendChild(newContact_image);
+
+        let contact_column = document.createElement('div');
+        contact_column.className += 'col-sm-8';
+        newContact.appendChild(contact_column);
+
+        let contact_name = document.createElement('p');
+
+        let text = document.createTextNode(conversations[i].username);
+
+        contact_name.appendChild(text);
+        contact_column.appendChild(contact_name);
+
+
+
+
         // let image_src = user_image;
         // let newContact_image = document.createElement('image');
         // newContact_image.setAttribute('src', image_src);
         // newContact_image.className += 'contact_image';
         // newLink.appendChild(newContact_image);
         //
-         let text = document.createTextNode(conversations[i].username);
+
         //
         // newContact_image.parentNode.insertBefore(text, newContact_image.nextSibling);
 
-        newContact.appendChild(text);
-        newLink.appendChild(newContact);
-        contactList.appendChild(newLink);
+
+
+
+
         newContact.addEventListener('click', function(e){
             e.preventDefault();
             displayMessages(conversations[i])
