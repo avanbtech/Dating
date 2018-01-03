@@ -8,7 +8,10 @@ block content
             .alert.alert-danger #{err.msg}
     .row
         .col-sm-3
-            image.profile_image(src=logged_in_user.image, alt='profile_image')
+            img.image_in_profile(src=logged_in_user.image, alt='profile_image')
+            br
+            a(href='/users/profile/uploadImage')
+                p.center_text Edit Image
         .col-sm-9
             .form-group
                 .row

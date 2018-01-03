@@ -27,6 +27,8 @@ router.get('/profile', authentication.isLoggedIn, userController.user_profile_ge
 // Update
 router.post('/profile/update', authentication.isLoggedIn, userController.user_profile_update_post);
 
+router.get('/profile/uploadImage', authentication.isLoggedIn, userController.user_upload_image);
+
 // Browse
 router.get('/browse', authentication.isLoggedIn, userController.user_browse_get);
 

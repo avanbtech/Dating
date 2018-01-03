@@ -11,6 +11,8 @@ var passport = require('passport');
 var localStrategy = require('mongodb');
 var mongoose = require('mongoose');
 var mongoDB = 'mongodb://localhost:27017/datingDB';
+var multer = require('multer');
+var upload = multer({dest: 'public/uploads/'});
 
 var index = require('./routes/index');
 var users = require('./routes/users');
