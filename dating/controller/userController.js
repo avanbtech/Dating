@@ -2,6 +2,8 @@ var User = require('../models/user');
 var Message = require('../models/message');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var multer = require('multer');
+
 
 // Handle get request for registration page
 exports.user_register_get = function(req, res, next){
@@ -87,7 +89,7 @@ exports.user_profile_get = function(req, res, next){
            last_name: result.last_name,
            email: result.email,
            date_of_birth: (date.getFullYear() + '-' + month + '-' + day),
-           image: '/images/default_image.png'
+           image: result.image
        };
         res.render('profile', {logged_in_user: updated_result});
     });
@@ -131,6 +133,24 @@ exports.user_profile_update_post = function(req, res, next){
                 res.json(success);
         });
     }
+};
+
+// Handle get request for uploading user image
+exports.user_upload_image_get = function(req, res, next){
+    res.render('upload_image');
+};
+
+// Handle post request for uploading user image
+exports.user_upload_image_post = function(req, res, next){
+    console.log(req.file.originalname);
+    console.log(req.file);
+
+    User.update({_id: req.user._id}, {
+        image: '/uploads/' + req.file.filename
+    }, function (err, result) {
+        if(err){throw err}
+        res.redirect('/users/profile');
+    })
 };
 
 // Handle get request for browse

@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    h2.page-header Edit Image
+    form(method='post' action='/users/profile/uploadImage' enctype='multipart/form-data')
+        .form-group
+            input#file_path.form-control(type='file', placeholder='Image path', name='profileImage')
+        .form-group
+            button.btn.btn-default(type='submit') Submit

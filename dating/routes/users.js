@@ -2,6 +2,17 @@ var express = require('express');
 var router = express.Router();
 var userController = require('../controller/userController');
 var authentication = require('./authentication');
+var multer = require('multer');
+// var upload = multer({dest: 'dating/public/uploads/'});
+var storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, 'dating/public/uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, req.user._id + '-' + file.originalname)
+    }
+});
+var upload = multer({storage: storage});
 
 
 // Register get
@@ -27,7 +38,11 @@ router.get('/profile', authentication.isLoggedIn, userController.user_profile_ge
 // Update
 router.post('/profile/update', authentication.isLoggedIn, userController.user_profile_update_post);
 
-router.get('/profile/uploadImage', authentication.isLoggedIn, userController.user_upload_image);
+// Load form for uploading image
+router.get('/profile/uploadImage', authentication.isLoggedIn, userController.user_upload_image_get);
+
+// Update image
+router.post('/profile/uploadImage', authentication.isLoggedIn, upload.single('profileImage'), userController.user_upload_image_post);
 
 // Browse
 router.get('/browse', authentication.isLoggedIn, userController.user_browse_get);
