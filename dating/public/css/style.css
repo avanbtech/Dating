@@ -117,3 +117,12 @@ body {
 .center_text{
   text-align: center;
 }
+
+form.cmxform label.error,label.error {
+  color: red;
+  font-style: italic
+}
+
+div.error {
+  display: none;
+}

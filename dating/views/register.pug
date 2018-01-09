@@ -5,26 +5,29 @@ block content
     if errors
         each err in errors
             .alert.alert-danger #{err.msg}
-    form(method='post', action='/users/register')
+    form#register_form(method='post', action='/users/register')
         .form-group
             label First Name
-            input.form-control(type='text', placeholder='First Name', name='firstName')
+            input.form-control(type='text', placeholder='First Name', name='firstName', minlength="2" required)
         .form-group
             label Last Name
-            input.form-control(type='text', placeholder='Last Name', name='lastName')
+            input.form-control(type='text', placeholder='Last Name', name='lastName', minlength="2" required)
         .form-group
             label Username
-            input.form-control(type='text', placeholder='Username', name='username')
-        .form-group
+            input.form-control(type='text', placeholder='Username', name='username' required)
         .form-group
             label Date of Birth
-            input.form-control(type='date', placeholder='Date of Birth', name='birthday')
+            input.form-control(type='date', placeholder='Date of Birth', name='birthday' required)
+        .form-group
             label Email
-            input.form-control(type='email', placeholder='Email', name='email')
+            input.form-control(type='email', placeholder='Email', name='email' required)
         .form-group
             label Password
-            input.form-control(type='password', placeholder='password', name='password')
+            input.form-control(type='password', placeholder='password', name='password' required)
         .form-group
             label Confirm Password
-            input.form-control(type='password', placeholder='Password', name='password2')
+            input.form-control(type='password', placeholder='Password', name='password2' required)
         button.btn.btn-default(type='submit') Submit
+
+    script(src='/js/register_validation')
+    script  $("#register_form").validate();

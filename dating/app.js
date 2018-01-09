@@ -11,6 +11,7 @@ var passport = require('passport');
 var localStrategy = require('mongodb');
 var mongoose = require('mongoose');
 var mongoDB = 'mongodb://localhost:27017/datingDB';
+var expressSanitizer = require('express-sanitizer');
 
 
 var index = require('./routes/index');
@@ -35,6 +36,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(expressSanitizer());
 
 //Express Session
 app.use(session({

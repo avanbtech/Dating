@@ -2,8 +2,14 @@ var User = require('../models/user');
 var Message = require('../models/message');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var multer = require('multer');
 
+// Scape and trim input data
+var validate = function(req){
+    for(var propt in req.body){
+        req.filter(propt).escape();
+        req.filter(propt).trim();
+    }
+}
 
 // Handle get request for registration page
 exports.user_register_get = function(req, res, next){
@@ -12,6 +18,9 @@ exports.user_register_get = function(req, res, next){
 
 // Handle post request for user registration
 exports.user_register_post = function(req, res, next){
+
+    validate(req);
+
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var dateOfBirth = req.body.birthday;
@@ -97,6 +106,8 @@ exports.user_profile_get = function(req, res, next){
 
 // Handle post request for profile update
 exports.user_profile_update_post = function(req, res, next){
+
+    validate(req);
 
     req.checkBody('first_name', 'First name is required').notEmpty();
     req.checkBody('last_name', 'Last name is required').notEmpty();
@@ -190,6 +201,8 @@ exports.user_detail_get = function(req, res, next){
 
 // Handle post request to sent a message to another member
 exports.user_message_post = function(req, res, next){
+
+    validate(req);
 
     req.checkBody('message', 'Message cannot be empty');
     var errors = req.validationErrors();

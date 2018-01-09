@@ -18,25 +18,25 @@ block content
                     .col-sm-3
                         label First name
                     .col-sm-8
-                        input#first_name.form-control(type='text', placeholder='First name', name='firstName', value=(logged_in_user.first_name))
+                        input#first_name.form-control(type='text', placeholder='First name', name='firstName', value=(logged_in_user.first_name) required)
             .form-group
                 .row
                     .col-sm-3
                         label Last name
                     .col-sm-8
-                        input#last_name.form-control(type='text', placeholder='Last name', name='lastName', value=(logged_in_user.last_name))
+                        input#last_name.form-control(type='text', placeholder='Last name', name='lastName', value=(logged_in_user.last_name) required)
             .form-group
                 .row
                     .col-sm-3
                         label Email
                     .col-sm-8
-                        input#email.form-control(type='email', placeholder='Email', name='email', value=(logged_in_user.email))
+                        input#email.form-control(type='email', placeholder='Email', name='email', value=(logged_in_user.email), required)
             .form-group
                 .row
                     .col-sm-3
                         label Date of Birth
                     .col-sm-8
-                        input#date_of_birth.form-control(type='date', placeholder='Date of Birth', name='dateOfBirth', value=(logged_in_user.date_of_birth))
+                        input#date_of_birth.form-control(type='date', placeholder='Date of Birth', name='dateOfBirth', value=(logged_in_user.date_of_birth), required)
             .form-group
                 .row
                     .col-sm-3
